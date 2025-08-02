@@ -7,6 +7,8 @@ object Dimens {
     val BottomPadding = 20.dp
     val SpacerPadding = 10.dp
 
+    val StandartPadding = 16.dp
+
     // Размеры элементов
     val ImageHeight = 200.dp
     val IconSize = 32.dp

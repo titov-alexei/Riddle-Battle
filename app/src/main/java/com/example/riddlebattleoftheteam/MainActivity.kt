@@ -8,10 +8,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.riddlebattleoftheteam.presentation.navigation.NavController
 import com.example.riddlebattleoftheteam.ui.theme.RiddleBattleOfTheTeamTheme
+import com.example.riddlebattleoftheteam.utils.LanguageHelper
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LanguageHelper(this).getCurrentLanguage() // Применяем сохранённый язык
 
         hideSystemNavigationBar() //Скрытие системной навигации снизу в приложении
 
