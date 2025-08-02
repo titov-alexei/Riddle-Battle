@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Загадки (Битва команд)</string>
+    <string name="start">НАЧАТЬ</string>
+    <string name="question">Вопрос</string>
+    <string name="battle_of_the_team">Битва команд</string>
+    <string name="program_version">Версия программы: 1.0</string>
+    <string name="program_developer">Разработчик: Алексей Титов</string>
+    <string name="select_language">Выберите язык</string>
+    <string name="save">Сохранить</string>
+    <string name="russian">Русский</string>
+    <string name="english">Английский</string>
+</resources>

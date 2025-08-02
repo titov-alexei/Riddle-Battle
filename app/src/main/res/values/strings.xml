@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Riddle (Battle of the teams)</string>
+    <string name="start">START</string>
+    <string name="question">Question</string>
+    <string name="battle_of_the_team">Battle of the teams</string>
+    <string name="program_version">Program version: 1.0</string>
+    <string name="program_developer">Developer: Alexei Titov</string>
+    <string name="description_logo" translatable="false">logo</string>
+    <string name="select_language">Select language</string>
+    <string name="save">Save</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+</resources>
