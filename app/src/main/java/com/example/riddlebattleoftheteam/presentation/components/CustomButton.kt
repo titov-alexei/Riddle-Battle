@@ -3,18 +3,16 @@ package com.example.riddlebattleoftheteam.presentation.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.unit.dp
 import com.example.riddlebattleoftheteam.ui.theme.DarkGreen
 import com.example.riddlebattleoftheteam.ui.theme.Dimens
 
@@ -22,7 +20,7 @@ import com.example.riddlebattleoftheteam.ui.theme.Dimens
 fun CustomButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -31,7 +29,7 @@ fun CustomButton(
         shape = RoundedCornerShape(Dimens.ButtonCornerRadius),
         modifier = modifier
             .height(Dimens.ButtonHeight)
-            .width(Dimens.ButtonWidth)
+            .widthIn(Dimens.ButtonWidth)
             .scale(if (isPressed) 0.90f else 1f),
         interactionSource = interactionSource,
         onClick = onClick,
@@ -40,8 +38,8 @@ fun CustomButton(
         ),
     ) {
         Text(
+            fontSize = Dimens.SmallText,
             text = text,
-            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

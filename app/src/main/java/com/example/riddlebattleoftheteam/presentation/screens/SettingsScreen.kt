@@ -1,97 +1,100 @@
 package com.example.riddlebattleoftheteam.presentation.screens
 
-import android.content.Context
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import android.app.Activity
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.riddlebattleoftheteam.R
 import com.example.riddlebattleoftheteam.presentation.components.CustomBox
+import com.example.riddlebattleoftheteam.presentation.components.CustomButton
+import com.example.riddlebattleoftheteam.presentation.viewmodels.SettingsViewModel
 import com.example.riddlebattleoftheteam.ui.theme.Dimens
-import com.example.riddlebattleoftheteam.utils.LanguageHelper
-import java.util.Locale
+import com.example.riddlebattleoftheteam.utils.Constants
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings() {
+fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
-    val languageHelper = remember { LanguageHelper(context) }
-    val currentLanguage = remember { mutableStateOf(languageHelper.getCurrentLanguage()) }
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column {
-            Button(onClick = {
-                languageHelper.setLanguage("en")
-                currentLanguage.value = "en"
-            }) {
-                Text(
-                    "English",
-                    color = if (currentLanguage.value == "en") Color.Green else Color.White
-                )
-            }
+    val state by viewModel.state.collectAsState()
 
-            Button(onClick = {
-                languageHelper.setLanguage("ru")
-                currentLanguage.value = "ru"
-            }) {
-                Text(
-                    "Русский",
-                    color = if (currentLanguage.value == "ru") Color.Green else Color.White
-                )
-            }
-        }
+    LaunchedEffect(Unit) {
+        viewModel.loadLanguage()
     }
 
-    /*Box(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
     ) {
-        Column(
+        Box(modifier = Modifier.weight(1f))
+
+        Box(
             modifier = Modifier
+                .weight(1f)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(Dimens.StandartPadding)
+            contentAlignment = Alignment.TopCenter
         ) {
-            Text(
-                text = stringResource(R.string.select_language)
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(Dimens.StandartPadding)
+            ) {
+                Text(text = stringResource(R.string.select_language))
 
-            CustomBox (
-                text = "Russian",
-                showBorder = resultLang == 1,
-                onClick = {
-                    resultLang = 1
-                    Log.d("MYLOG", "-------${resultLang}")
+                LanguageSelectionUI(
+                    selectedLanguage = state.currentLanguage,
+                    onLanguageSelected = { lang ->
+                        viewModel.setLanguage(lang)
+                    }
+                )
 
-                }
-            )
-            CustomBox (
-                text = "English",
-                showBorder = resultLang == 2,
-                onClick = {
-                    resultLang = 2
-                    Log.d("MYLOG", "-------${resultLang}")
-                }
-            )
+                Spacer(Modifier.height(Dimens.SpacerPadding))
 
+                CustomButton(
+                    text = stringResource(R.string.save),
+                    onClick = {
+                        viewModel.applyLanguage()
+                        (context as Activity).recreate()
+                    },
+                )
+            }
         }
 
+        if (state.showSuccessMessage) {
+            Toast.makeText(context, R.string.settings_saved, Toast.LENGTH_SHORT).show()
+            viewModel.messageShown()
+        }
 
+        if (state.error != null) {
+            Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
+            viewModel.errorShown()
+        }
+    }
+}
 
-    }*/
+@Composable
+private fun LanguageSelectionUI(
+    selectedLanguage: String,
+    onLanguageSelected: (String) -> Unit
+) {
+    CustomBox(
+        text = stringResource(R.string.russian),
+        showBorder = selectedLanguage == Constants.LANGUAGE_RU,
+        onClick = { onLanguageSelected(Constants.LANGUAGE_RU) }
+    )
+
+    CustomBox(
+        text = stringResource(R.string.english),
+        showBorder = selectedLanguage == Constants.LANGUAGE_EN,
+        onClick = { onLanguageSelected(Constants.LANGUAGE_EN) }
+    )
 }
