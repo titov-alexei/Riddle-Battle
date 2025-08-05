@@ -10,4 +10,7 @@
     <string name="save">Save</string>
     <string name="russian">Russian</string>
     <string name="english">English</string>
+    <string name="settings_saved">Settings saved</string>
+    <string name="settings_not_saved">Settings not saved</string>
+    <string name="language">Language</string>
 </resources>

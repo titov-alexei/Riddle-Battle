@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +18,7 @@ import com.example.riddlebattleoftheteam.R
 import com.example.riddlebattleoftheteam.presentation.components.Logo
 import com.example.riddlebattleoftheteam.presentation.screens.About
 import com.example.riddlebattleoftheteam.presentation.screens.Home
-import com.example.riddlebattleoftheteam.presentation.screens.Settings
+import com.example.riddlebattleoftheteam.presentation.screens.SettingsScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -59,14 +58,11 @@ fun NavController() {
                 Home()
             }
             composable (BottomNavItem.Settings.route) {
-                Settings()
+                SettingsScreen()
             }
             composable (BottomNavItem.About.route) {
                 About()
             }
         }
     }
-
-
-
 }
