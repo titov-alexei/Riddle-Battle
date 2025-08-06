@@ -13,4 +13,9 @@
     <string name="settings_saved">Settings saved</string>
     <string name="settings_not_saved">Settings not saved</string>
     <string name="language">Language</string>
+    <string name="select_number_teams">Select the number of teams</string>
+    <string name="play">Play</string>
+    <string name="enter_command_name">Enter the command name</string>
+    <string name="team">Team</string>
+    <string name="fill_all_name_teams">Fill in all the team names</string>
 </resources>

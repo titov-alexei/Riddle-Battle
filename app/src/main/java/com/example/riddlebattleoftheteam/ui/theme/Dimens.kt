@@ -7,6 +7,7 @@ object Dimens {
     // Отступы
     val BottomPadding = 20.dp
     val SpacerPadding = 10.dp
+    val SmallPadding = 5.dp
     val CustomBoxPadding = 50.dp
     val StandartPadding = 16.dp
 
