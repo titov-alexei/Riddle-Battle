@@ -8,11 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
 import com.example.riddlebattleoftheteam.R
 import com.example.riddlebattleoftheteam.presentation.components.CustomButton
+import com.example.riddlebattleoftheteam.presentation.navigation.Screen
 
 @Composable
-fun Home() {
+fun Home(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -27,7 +29,10 @@ fun Home() {
             contentAlignment = Alignment.TopCenter
         ) {
             CustomButton(text = stringResource(R.string.start), onClick = {
-                //Здесь переход в окно подготовки к игре
+                navController.navigate(Screen.GamePreparationScreen.route) {
+                    popUpTo(Screen.Home.route) { inclusive = false }
+                    launchSingleTop = true
+                }
             })
         }
     }

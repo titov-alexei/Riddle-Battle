@@ -13,4 +13,9 @@
     <string name="settings_saved">Настройки сохранены</string>
     <string name="settings_not_saved">Настройки не сохранены</string>
     <string name="language">Язык</string>
+    <string name="select_number_teams">Выберите количество команд</string>
+    <string name="play">Играть</string>
+    <string name="enter_command_name">Введите названия команд</string>
+    <string name="team">Команда</string>
+    <string name="fill_all_name_teams">Заполните все названия команд</string>
 </resources>

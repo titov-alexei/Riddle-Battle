@@ -21,9 +21,9 @@ import com.example.riddlebattleoftheteam.ui.theme.LightGreen
 fun Navigation(navController: NavHostController) {
 
     val listMenuItem = listOf(
-        BottomNavItem.Home,
-        BottomNavItem.Settings,
-        BottomNavItem.About,
+        Screen.Home,
+        Screen.Settings,
+        Screen.About,
     )
 
     NavigationBar(

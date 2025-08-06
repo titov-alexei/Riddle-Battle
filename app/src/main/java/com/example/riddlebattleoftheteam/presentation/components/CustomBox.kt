@@ -24,8 +24,8 @@ fun CustomBox(
     modifier: Modifier = Modifier.padding(horizontal = Dimens.CustomBoxPadding),
     backgroundColor: Color = Color.White,
     cornerRadius: Dp = Dimens.ButtonCornerRadius,
-    text: String,
-    showBorder: Boolean,
+    text: String = "",
+    showBorder: Boolean = false,
     onClick: () -> Unit,
 ) {
     Box(
