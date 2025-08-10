@@ -1,90 +1,196 @@
 package com.example.riddlebattleoftheteam.presentation.viewmodels
 
-import androidx.compose.runtime.mutableStateOf
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.riddlebattleoftheteam.domain.model.Riddle
+import com.example.riddlebattleoftheteam.domain.model.Team
+import com.example.riddlebattleoftheteam.domain.model.TeamResult
 import com.example.riddlebattleoftheteam.domain.repository.RiddleRepository
 import com.example.riddlebattleoftheteam.domain.repository.TeamRepository
 import com.example.riddlebattleoftheteam.presentation.state.GameState
+import com.example.riddlebattleoftheteam.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val riddleRepository: RiddleRepository,
-    private val teamRepository: TeamRepository
+    private val teamRepository: TeamRepository,
+    private val riddleRepository: RiddleRepository
 ) : ViewModel() {
 
-    private val _gameState = MutableStateFlow<GameState>(GameState.Preparation(emptyList()))
-    val gameState: StateFlow<GameState> = _gameState.asStateFlow()
+    // Состояния
+    private val _gameState = MutableStateFlow<GameState>(GameState.Preparation)
+    val gameState: StateFlow<GameState> = _gameState
 
-    init {
-        loadTeams()
-        loadRiddles()
-    }
+    private val _currentTeam = MutableStateFlow<Team?>(null)
+    val currentTeam: StateFlow<Team?> = _currentTeam
 
-    private fun loadTeams() {
+    private val _currentRiddle = MutableStateFlow<Riddle?>(null)
+    val currentRiddle: StateFlow<Riddle?> = _currentRiddle
+
+    private val _timeLeft = MutableStateFlow(Constants.TIMER_TIME)
+    val timeLeft: StateFlow<Int> = _timeLeft
+
+    private val _questionNumber = MutableStateFlow(1)
+    val questionNumber: StateFlow<Int> = _questionNumber
+
+    private val _teamsState = MutableStateFlow<List<Team>>(emptyList())
+    val teams: StateFlow<List<Team>> = _teamsState
+
+    private val _currentRound = MutableStateFlow(0)
+    val currentRound: StateFlow<Int> = _currentRound
+
+    private val _isWaitingForNextTeam = MutableStateFlow(false)
+    val isWaitingForNextTeam: StateFlow<Boolean> = _isWaitingForNextTeam
+
+    private val _teamResults = MutableStateFlow<List<TeamResult>>(emptyList())
+    val teamResults: StateFlow<List<TeamResult>> = _teamResults
+    // Приватные переменные
+    private var timerJob: Job? = null
+    private var currentTeamIndex = 0
+    private val teamAnswers = mutableMapOf<Int, MutableList<Boolean>>()
+
+    fun loadGameData() {
         viewModelScope.launch {
-            teamRepository.getTeams().collect { teams ->
-                _gameState.value = GameState.Preparation(teams)
-            }
+            loadTeams()
+            startNewRound()
         }
     }
 
-    private fun loadRiddles() {
+    fun loadTeams() {
         viewModelScope.launch {
-            val result = riddleRepository.fetchRiddles()
-            result.onFailure { e ->
-                println("Failed to load riddles: ${e.message}")
-            }
+            val loadedTeams = teamRepository.getTeams()
+            if (loadedTeams.isEmpty()) return@launch
+
+            _teamsState.value = loadedTeams
+            teamAnswers.clear()
+            loadedTeams.forEach { team -> teamAnswers[team.id] = mutableListOf() }
+
+            startNewGame()
         }
     }
 
-    fun startGame() {
-        viewModelScope.launch {
-            val teams = (_gameState.value as? GameState.Preparation)?.teams ?: return@launch
-            if (teams.isEmpty()) return@launch
+    private suspend fun startNewGame() {
+        currentTeamIndex = 0
+        _currentRound.value = 0
+        _currentTeam.value = _teamsState.value.first()
+        _gameState.value = GameState.Active
+        loadNewRiddle()
+        startTimer()
+    }
 
-            val riddle = try {
-                riddleRepository.getRandomRiddle()
-            } catch (e: Exception) {
-                println("Error getting riddle: ${e.message}")
-                return@launch
-            }
-
-            _gameState.value = GameState.Active(
-                currentTeam = teams.first(),
-                currentRiddle = riddle,
-                timeLeft = 120,
-                teams = teams
-            )
-
-            startTimer()
+    private suspend fun loadNewRiddle() {
+        try {
+            _currentRiddle.value = riddleRepository.getRandomRiddle()
+        } catch (e: Exception) {
+            Log.e("GameViewModel", "Error loading riddle", e)
         }
     }
 
     private fun startTimer() {
-        viewModelScope.launch {
-            while (((_gameState.value as? GameState.Active)?.timeLeft ?: 0) > 0) {
+        timerJob?.cancel()
+        _timeLeft.value = Constants.TIMER_TIME
+        _isWaitingForNextTeam.value = false
+
+        timerJob = viewModelScope.launch {
+            while (_timeLeft.value > 0) {
                 delay(1000)
-                _gameState.value = (_gameState.value as GameState.Active).copy(
-                    timeLeft = (_gameState.value as GameState.Active).timeLeft - 1
-                )
+                _timeLeft.value -= 1
             }
-            submitAnswer(false) // Автоматически неверный ответ при таймауте
+
+            // Таймер закончился — ждём нажатия кнопки
+            _isWaitingForNextTeam.value = true
+        }
+    }
+
+    fun proceedToNextTeam() {
+        viewModelScope.launch {
+            _isWaitingForNextTeam.value = false
+            moveToNextTeamOrRound()
         }
     }
 
     fun submitAnswer(isCorrect: Boolean) {
-        // Обновляем счет и переходим к следующей команде/загадке
+        viewModelScope.launch {
+            // Сохраняем ответ
+            currentTeam.value?.id?.let { teamId ->
+                teamAnswers[teamId]?.add(isCorrect)
+            }
+
+            // Обновляем счет если ответ верный
+            if (isCorrect) {
+                updateTeamScore()
+            }
+
+            _questionNumber.value += 1
+            loadNewRiddle()
+        }
     }
 
-    fun resetGame() {
-        loadTeams()
+    private suspend fun updateTeamScore() {
+        val updatedTeams = _teamsState.value.toMutableList().apply {
+            this[currentTeamIndex] = this[currentTeamIndex].copy(
+                score = this[currentTeamIndex].score + 1
+            )
+        }
+        _teamsState.value = updatedTeams
+        teamRepository.updateTeam(updatedTeams[currentTeamIndex])
+    }
+
+    suspend fun moveToNextTeamOrRound() {
+        if (isLastTeamInRound()) {
+            finishGame()
+        } else {
+            nextTeam()
+        }
+    }
+
+    fun isLastTeamInRound() = currentTeamIndex == _teamsState.value.size - 1
+
+    private suspend fun startNewRound() {
+        _currentRound.value++
+        currentTeamIndex = 0
+        _currentTeam.value = _teamsState.value[currentTeamIndex]
+        _questionNumber.value = 1
+        loadNewRiddle()
+        startTimer()
+    }
+
+    suspend fun nextTeam() {
+        currentTeamIndex = (currentTeamIndex + 1) % _teamsState.value.size
+        _currentTeam.value = _teamsState.value[currentTeamIndex]
+        _questionNumber.value = 1
+        loadNewRiddle()
+        startTimer()
+    }
+
+    fun finishGame() {
+        calculateResults()
+        _gameState.value = GameState.Finished(
+            teamAnswers = teamAnswers.mapValues { it.value.toList() }
+        )
+    }
+
+    private fun calculateResults() {
+        val results = _teamsState.value.map { team ->
+            val answers = teamAnswers[team.id] ?: emptyList()
+            val correctCount = answers.count { it }
+
+            TeamResult(
+                teamName = team.name,
+                correctAnswers = correctCount
+            )
+        }.sortedByDescending { it.correctAnswers }
+
+        _teamResults.value = results
     }
 }
+

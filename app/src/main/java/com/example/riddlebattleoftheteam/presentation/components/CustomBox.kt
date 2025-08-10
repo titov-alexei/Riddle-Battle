@@ -51,7 +51,7 @@ fun CustomBox(
             contentAlignment = Alignment.Center
     ) {
         Text(
-            fontSize = 16.sp,
+            fontSize = Dimens.SmallText,
             text = text
         )
     }

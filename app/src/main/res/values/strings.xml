@@ -18,4 +18,14 @@
     <string name="enter_command_name">Enter the command name</string>
     <string name="team">Team</string>
     <string name="fill_all_name_teams">Fill in all the team names</string>
+    <string name="next">Next</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="are_you_ready">Are you ready?</string>
+    <string name="loading_riddle">Riddle is loading</string>
+    <string name="the_teams_start">The team starts:</string>
+    <string name="next_team">Next team</string>
+    <string name="results">Results</string>
+    <string name="play_again">Play again</string>
+    <string name="correct">correct</string>
 </resources>

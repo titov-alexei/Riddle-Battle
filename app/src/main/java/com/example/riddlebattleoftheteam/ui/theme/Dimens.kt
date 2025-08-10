@@ -9,10 +9,10 @@ object Dimens {
     val SpacerPadding = 10.dp
     val SmallPadding = 5.dp
     val CustomBoxPadding = 50.dp
+    val CustomViewPadding = 30.dp
     val StandartPadding = 16.dp
 
     // Размеры элементов
-    val ImageHeight = 200.dp
     val IconSize = 32.dp
     val NavHeight = 48.dp
     val ButtonCornerRadius = 16.dp

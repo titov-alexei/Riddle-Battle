@@ -28,7 +28,6 @@ import com.example.riddlebattleoftheteam.domain.repository.TeamRepository
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    private const val BASE_URL = "https://api.api-ninjas.com/"
 
     @Provides
     @Singleton
@@ -54,7 +53,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

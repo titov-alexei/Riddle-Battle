@@ -5,5 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TeamRepository {
     suspend fun saveTeams(teams: List<Team>)
-    fun getTeams(): Flow<List<Team>>
+    suspend fun getTeams(): List<Team>
+    suspend fun updateTeam(team: Team)
+    suspend fun clearTeams()
 }

@@ -21,7 +21,6 @@ import com.example.riddlebattleoftheteam.R
 import com.example.riddlebattleoftheteam.presentation.components.CustomBox
 import com.example.riddlebattleoftheteam.presentation.components.CustomButton
 import com.example.riddlebattleoftheteam.presentation.components.CustomTextFiled
-import com.example.riddlebattleoftheteam.presentation.navigation.Screen
 import com.example.riddlebattleoftheteam.presentation.viewmodels.GamePreparationViewModel
 import com.example.riddlebattleoftheteam.ui.theme.DarkGreen
 import com.example.riddlebattleoftheteam.ui.theme.Dimens
@@ -74,7 +73,7 @@ fun GamePreparationScreen(
         }
 
         CustomButton(
-            text = stringResource(R.string.play),
+            text = stringResource(R.string.next),
             onClick = { viewModel.startGame(navController) }
         )
     }

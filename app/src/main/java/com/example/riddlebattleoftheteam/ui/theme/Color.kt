@@ -13,3 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val DarkGreen = Color(0xFF035058)
 
 val LightGreen = Color(0xFFB6EF88)
+
+val Gold = Color(0xFFFFD700)
+val Silver = Color(0xFFC0C0C0)
+val Bronze = Color(0xFFCD7F32)
