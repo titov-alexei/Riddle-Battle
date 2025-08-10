@@ -16,7 +16,7 @@ sealed class Screen(val route : String, val icon : ImageVector) {
 
     object GamePreparationScreen : Screen("game_preparation", Icons.Default.Build)
     object GameScreen : Screen("game_screen", Icons.Default.PlayArrow)
-    object GameResult : Screen("game_result", Icons.Default.CheckCircle)
+    object GameResultScreen : Screen("game_result", Icons.Default.CheckCircle)
 
 
 }

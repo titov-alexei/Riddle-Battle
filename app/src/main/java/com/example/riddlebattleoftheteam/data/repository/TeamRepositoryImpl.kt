@@ -25,15 +25,27 @@ class TeamRepositoryImpl @Inject constructor(
         })
     }
 
-    override fun getTeams(): Flow<List<Team>> {
-        return db.teamDao().getAll().map { entities ->
-            entities.map { entity ->
-                Team(
-                    id = entity.id,
-                    name = entity.name,
-                    score = entity.score
-                )
-            }
+    override suspend fun getTeams(): List<Team> {
+        return db.teamDao().getAll().map { entity ->
+            Team(
+                id = entity.id,
+                name = entity.name,
+                score = entity.score
+            )
         }
+    }
+
+    override suspend fun updateTeam(team: Team) {
+        db.teamDao().update(
+            TeamEntity(
+                id = team.id,
+                name = team.name,
+                score = team.score
+            )
+        )
+    }
+
+    override suspend fun clearTeams() {
+        db.teamDao().clearTeams()
     }
 }

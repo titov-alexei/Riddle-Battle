@@ -18,4 +18,14 @@
     <string name="enter_command_name">Введите названия команд</string>
     <string name="team">Команда</string>
     <string name="fill_all_name_teams">Заполните все названия команд</string>
+    <string name="next">Далее</string>
+    <string name="yes">ДА</string>
+    <string name="no">НЕТ</string>
+    <string name="are_you_ready">Вы готовы?</string>
+    <string name="loading_riddle">Загрузка загадки</string>
+    <string name="the_teams_start">Начинает команда</string>
+    <string name="next_team">Следующая команда</string>
+    <string name="results">Результаты</string>
+    <string name="play_again">Играть снова</string>
+    <string name="correct">правильных</string>
 </resources>

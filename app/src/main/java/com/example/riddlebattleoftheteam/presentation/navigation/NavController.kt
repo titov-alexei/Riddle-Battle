@@ -51,10 +51,10 @@ fun NavController() {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop  //Равномерное увеличение изображения
         )
-        Column( //The window was divided into 2 parts
+        Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            Box(//Upper part for logo
+            Box(
                 modifier = Modifier
                     .weight(1f),
                 contentAlignment = Alignment.Center
@@ -63,7 +63,7 @@ fun NavController() {
                     Logo()
                 }
             }
-            Box(//Bottom part
+            Box(
                 modifier = Modifier
                     .weight(1f)
             )
@@ -90,7 +90,7 @@ fun NavController() {
             composable(Screen.GameScreen.route) {
                 GameScreen(navController)
             }
-            composable(Screen.GameResult.route) {
+            composable(Screen.GameResultScreen.route) {
                 GameResultsScreen(navController)
             }
 

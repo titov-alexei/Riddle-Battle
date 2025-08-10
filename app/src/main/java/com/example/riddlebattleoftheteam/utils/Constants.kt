@@ -10,4 +10,6 @@ object Constants {
     // API
     const val BASE_URL = "https://api.example.com/"
 
+    const val TIMER_TIME = 15
+
 }

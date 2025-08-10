@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import com.example.riddlebattleoftheteam.ui.theme.DarkGreen
 import com.example.riddlebattleoftheteam.ui.theme.Dimens
 
@@ -21,6 +22,7 @@ fun CustomButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    color: Color = Color.White,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -38,6 +40,7 @@ fun CustomButton(
         ),
     ) {
         Text(
+            color = color,
             fontSize = Dimens.SmallText,
             text = text,
         )
