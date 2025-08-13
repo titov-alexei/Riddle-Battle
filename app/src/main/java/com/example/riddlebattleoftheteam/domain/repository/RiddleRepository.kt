@@ -7,4 +7,7 @@ interface RiddleRepository {
     suspend fun fetchRiddles(): Result<Unit>
     fun getRandomRiddles(limit: Int): Flow<List<Riddle>>
     suspend fun getRandomRiddle(): Riddle
+    suspend fun resetUsedRiddles()
+    suspend fun hasAnyRiddles(): Boolean
+
 }

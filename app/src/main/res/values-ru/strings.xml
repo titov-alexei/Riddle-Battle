@@ -28,4 +28,10 @@
     <string name="results">Результаты</string>
     <string name="play_again">Играть снова</string>
     <string name="correct">правильных</string>
+    <string name="teams_name_must_not_repeated">Названия команд не должны повторяться</string>
+    <string name="no_teams">Нет доступных команд</string>
+    <string name="loading_error">Ошибка загрузки:</string>
+    <string name="round_is_over">Ваш раунд окончен</string>
+    <string name="failed_load_riddles">Не удалось загрузить загадки после обновления</string>
+    <string name="error_getting_riddle">Ошибка при получении случайной загадки</string>
 </resources>

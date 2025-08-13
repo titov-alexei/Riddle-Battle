@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.riddlebattleoftheteam.data.db.TeamEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TeamDao {
