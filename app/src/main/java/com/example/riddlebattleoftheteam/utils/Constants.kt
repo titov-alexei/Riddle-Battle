@@ -8,7 +8,7 @@ object Constants {
     const val LANGUAGE_EN = "en"
 
     // API
-    const val BASE_URL = "https://api.example.com/"
+    const val BASE_URL = "https://api.api-ninjas.com/"
 
     const val TIMER_TIME = 15
 

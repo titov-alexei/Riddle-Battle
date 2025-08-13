@@ -72,7 +72,11 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "riddle-db"
-        ).build()
+        )
+            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .fallbackToDestructiveMigrationOnDowngrade()
+            //.fallbackToDestructiveMigration() //удалит все данные при изменении схемы
+            .build()
     }
 
     @Provides

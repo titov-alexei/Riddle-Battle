@@ -28,4 +28,10 @@
     <string name="results">Results</string>
     <string name="play_again">Play again</string>
     <string name="correct">correct</string>
+    <string name="teams_name_must_not_repeated">Team names must not be repeated</string>
+    <string name="no_teams">Teams is not created</string>
+    <string name="loading_error">Loading error:</string>
+    <string name="round_is_over">Your round is over</string>
+    <string name="failed_load_riddles">Failed to load riddles after update</string>
+    <string name="error_getting_riddle">Error getting random riddle</string>
 </resources>

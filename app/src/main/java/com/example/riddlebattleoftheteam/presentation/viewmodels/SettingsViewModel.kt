@@ -2,6 +2,7 @@ package com.example.riddlebattleoftheteam.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.riddlebattleoftheteam.R
 import com.example.riddlebattleoftheteam.domain.usecases.LanguageUseCase
 import com.example.riddlebattleoftheteam.presentation.settings.SettingsState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,7 +46,7 @@ class SettingsViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
-                    error = "context.getString(R.string.settings_not_saved, e.message)",
+                    error = "${R.string.settings_not_saved}, e.message",
                     isLoading = false
                 )
             }

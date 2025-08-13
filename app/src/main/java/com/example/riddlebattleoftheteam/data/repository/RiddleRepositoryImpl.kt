@@ -1,5 +1,7 @@
 package com.example.riddlebattleoftheteam.data.repository
 
+import android.util.Log
+import com.example.riddlebattleoftheteam.R
 import com.example.riddlebattleoftheteam.data.api.RiddleApiService
 import com.example.riddlebattleoftheteam.data.db.AppDatabase
 import com.example.riddlebattleoftheteam.data.db.RiddleEntity
@@ -22,12 +24,16 @@ class RiddleRepositoryImpl @Inject constructor(
             val response = api.getRiddles()
             if (response.isSuccessful) {
                 response.body()?.let { riddles ->
+                    // Помечаем все старые загадки как неиспользованные
+                    db.riddleDao().resetUsedRiddles()
+                    // Добавляем новые
                     db.riddleDao().insertAll(
                         riddles.map { apiResponse ->
                             RiddleEntity(
                                 title = apiResponse.title,
                                 question = apiResponse.question,
-                                answer = apiResponse.answer
+                                answer = apiResponse.answer,
+                                isUsed = 0
                             )
                         }
                     )
@@ -48,7 +54,31 @@ class RiddleRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRandomRiddle(): Riddle {
-        return db.riddleDao().getRandomUnusedRiddle().first()?.toDomain()
-            ?: throw NoSuchElementException("No unused riddles available")
+        return try {
+            // Сначала пробуем получить неиспользованную загадку
+            db.riddleDao().getRandomUnusedRiddle().first()?.let { entity ->
+                db.riddleDao().markAsUsed(entity.id)
+                entity.toDomain()
+            } ?: run {
+                // Если нет неиспользованных, загружаем новые с API
+                fetchRiddles().getOrThrow()
+                // Повторяем попытку после загрузки
+                db.riddleDao().getRandomUnusedRiddle().first()?.let { entity ->
+                    db.riddleDao().markAsUsed(entity.id)
+                    entity.toDomain()
+                } ?: throw IllegalStateException("${R.string.failed_load_riddles}")
+            }
+        } catch (e: Exception) {
+            Log.e("MYLOG", "${R.string.error_getting_riddle}", e)
+            throw e
+        }
+    }
+
+    override suspend fun resetUsedRiddles() {
+        db.riddleDao().resetUsedRiddles()
+    }
+
+    override suspend fun hasAnyRiddles(): Boolean {
+        return db.riddleDao().getRiddlesCount() > 0
     }
 }

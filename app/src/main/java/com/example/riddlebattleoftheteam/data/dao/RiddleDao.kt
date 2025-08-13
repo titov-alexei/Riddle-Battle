@@ -17,4 +17,13 @@ interface RiddleDao {
 
     @Query("SELECT * FROM riddles WHERE isUsed = 0 ORDER BY RANDOM() LIMIT 1")
     fun getRandomUnusedRiddle(): Flow<RiddleEntity?>
+
+    @Query("UPDATE riddles SET isUsed = 1 WHERE id = :riddleId")
+    suspend fun markAsUsed(riddleId: Int)
+
+    @Query("UPDATE riddles SET isUsed = 0")
+    suspend fun resetUsedRiddles()
+
+    @Query("SELECT COUNT(*) FROM riddles")
+    suspend fun getRiddlesCount(): Int
 }
